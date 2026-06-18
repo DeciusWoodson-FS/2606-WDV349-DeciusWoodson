@@ -37,18 +37,20 @@ export default function App() {
           font-family: 'Cambria', serif;
         }
         
-        /* Metaphor inspired Dialogue Box (Drafting Lines) */
+        /* Metaphor Dialogue Box (Drafting Lines) */
         .drafting-box {
-          position: relative;
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
           background: rgba(15, 15, 15, 0.75);
           backdrop-filter: blur(4px);
+          pointer-events: none;
         }
         /* Top & Bottom extending lines */
         .drafting-box::before {
           content: '';
           position: absolute;
-          top: 0; left: -12px; right: -12px;
-          height: 100%;
+          top: 0; bottom: 0;
+          left: -12px; right: -12px;
           border-top: 1px solid rgba(255, 255, 255, 0.3);
           border-bottom: 1px solid rgba(255, 255, 255, 0.3);
           pointer-events: none;
@@ -61,7 +63,6 @@ export default function App() {
           position: absolute;
           top: -12px; bottom: -12px;
           left: 0; right: 0;
-          width: 100%;
           border-left: 1px solid rgba(255, 255, 255, 0.3);
           border-right: 1px solid rgba(255, 255, 255, 0.3);
           pointer-events: none;
@@ -103,7 +104,7 @@ export default function App() {
       <div className="absolute top-0 left-0 w-[120%] h-[120%] -translate-x-1/4 -translate-y-1/4 rotate-[-15deg] bg-neutral-950 -z-10 shadow-[0_0_50px_rgba(0,0,0,0.8)]"></div>
       <div className="absolute bottom-[-10%] right-[-5%] w-1/3 h-1/2 rotate-25 bg-[#0d1766] opacity-20 -z-10 blur-3xl"></div>
 
-      {/* Main Split Container */}
+      {/* Main Split Container  */}
       <div className="relative z-10 w-full flex-1 flex flex-col md:flex-row bg-transparent">
         {/* Left Column */}
         <div className="flex-1 p-12 flex flex-col items-center justify-center relative border-b-2 md:border-b-0 md:border-r-2 border-neutral-700/50">
