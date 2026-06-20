@@ -9,12 +9,14 @@ export default function LoginPage({ navigateTo }) {
       <h2 className="font-cambria text-3xl md:text-4xl text-neutral-200 mb-16 text-center tracking-wide drop-shadow-md">
         Sign in to your account
       </h2>
-
       <form
         className="space-y-10 flex flex-col items-center w-full"
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={(e) => {
+          e.preventDefault();
+          navigateTo("dashboard");
+        }}
       >
-        {/* Email input */}
+        {/* Email Input */}
         <div className="w-full relative group">
           <div className="drafting-box absolute inset-0"></div>
           <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/0 group-focus-within:border-white/50 group-hover:border-white/50 transition-colors pointer-events-none z-30 flex items-center justify-center">
@@ -29,7 +31,7 @@ export default function LoginPage({ navigateTo }) {
           />
         </div>
 
-        {/* Password input */}
+        {/* Password Input */}
         <div className="w-full relative group">
           <div className="drafting-box absolute inset-0"></div>
           <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/0 group-focus-within:border-white/50 group-hover:border-white/50 transition-colors pointer-events-none z-30 flex items-center justify-center">
@@ -46,13 +48,27 @@ export default function LoginPage({ navigateTo }) {
 
         <div className="h-2"></div>
 
-        {/* Google Button */}
+        {/* Standard Login Action */}
         <button
           type="button"
+          onClick={() => navigateTo("dashboard")}
+          className="w-full relative group text-white transition-colors duration-200"
+        >
+          <div className="drafting-box absolute inset-0 bg-neutral-600/30 group-hover:bg-neutral-500/50"></div>
+          <div className="relative z-30 px-6 py-4 font-cambria text-lg uppercase tracking-widest font-bold">
+            Sign In
+          </div>
+        </button>
+
+        {/* Google Login */}
+        <button
+          type="button"
+          onClick={() => navigateTo("dashboard")}
           className="w-full relative group text-neutral-300 hover:text-white transition-colors duration-200"
         >
           <div className="drafting-box absolute inset-0"></div>
           <div className="relative z-30 px-6 py-4 flex items-center justify-center gap-4 font-cambria text-lg tracking-wide">
+            {/* Google Icon SVG */}
             <svg
               className="w-5 h-5 group-hover:scale-110 transition-transform"
               viewBox="0 0 24 24"
@@ -79,7 +95,7 @@ export default function LoginPage({ navigateTo }) {
           </div>
         </button>
 
-        {/* Swap to Register Route */}
+        {/* Swap to Register Action */}
         <button
           type="button"
           onClick={() => navigateTo("register")}
