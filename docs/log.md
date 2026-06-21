@@ -44,7 +44,13 @@ Each week I will summarize my milestone activity and progress by writing a stand
 
 ### Week 3
 
-Stay tuned, this stand up is coming soon...
+⚙️ Overview - What I worked on this past week: This week I worked on creating the basic frontend for Sovereign. I created the login page, registration page, and a mock dashboard that will become more dynamic once the backend is created.
+<br>
+🌵 Challenges - What problems did I have & how I'm addressing them: The main issues I faced this week was figuring out how to get my unique styles to work properly. Getting the lines to extend past the limits of the text boxes and adding the hovering crosshair proved more difficult than I expected, but it turned out far better than I expected.
+<br>
+🏆 Accomplishments - What is something I "leveled up" on this week: Managing to get everything looking good so far. Next week will be the real challenge as I'll be working on the skill tree and it's basic functions.
+<br>
+🔮 Next Steps - What I plan to prioritize and do next: Next week will be finishing off the skill tree page and refining the smaller details. If there's time, I plan to draw out and work on the profile page.
 
 ### Week 4
 
