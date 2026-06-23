@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+/* --- CUSTOM FONTS --- */
+@font-face {
+  font-family: "Frontage";
+  src: url("/fonts/Frontage-Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Juana";
+  src: url("/fonts/Juana-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- TYPOGRAPHY UTILITIES --- */
+.font-title {
+  font-family: "Frontage", sans-serif;
+}
+
+.font-cambria {
+  font-family: "Cambria", serif;
+}
+
+.font-juana {
+  font-family: "Juana", serif;
+  font-weight: 900;
+}
+
+/* --- METAPHOR UI ELEMENTS --- */
+.drafting-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 15, 15, 0.75);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+.drafting-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -12px;
+  right: -12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  transition: border-color 0.3s;
+  z-index: 20;
+}
+.drafting-box::after {
+  content: "";
+  position: absolute;
+  top: -12px;
+  bottom: -12px;
+  left: 0;
+  right: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  transition: border-color 0.3s;
+  z-index: 20;
+}
+.group:hover .drafting-box::before,
+.group:hover .drafting-box::after,
+.group:focus-within .drafting-box::before,
+.group:focus-within .drafting-box::after {
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.metaphor-title-fx {
+  color: white;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2))
+    drop-shadow(0 4px 4px rgba(0, 0, 0, 0.8));
+}
+
+.sovereign-logo-transform {
+  display: inline-block;
+  transform: scaleY(0.55);
+  letter-spacing: -0.075em;
+  transform-origin: center;
+}
+
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+.name-plate-blend {
+  mix-blend-mode: screen;
+}
