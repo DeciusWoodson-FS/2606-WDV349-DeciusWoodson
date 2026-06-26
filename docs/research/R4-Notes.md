@@ -2,7 +2,7 @@
 
 - **Research Notes - Milestone 4**
 - **Woodson Decius**
-- **06.26.2027**
+- **06.26.2026**
 
 <br>
 
@@ -34,6 +34,18 @@ Research here was conducted on file structure, organization, configuration, and 
 
 <br>
 
+## Sub-Topic 3 - Designing in CSS
+
+Research here was conducted on designing complex shapes using modern CSS, this was done as the skill tree within Sovereign contains hexagons for the nodes on the page. A bit of research was also done creating a skill tree with connecting nodes as well.
+
+# Key findings:
+
+- Replicating a gaming interfaces requires clear visual cues. Using CSS to dynamically style the nodes—such as greying out locked skills, adding glowing borders to accessible ones, or visually connecting the tiers is crucial for helping users instantly understand their progression options.
+
+- While the visual aspect of a skill tree is important, the logic behind it is far more integral. The core challenge is writing JavaScript to track things like EXP gained per skill unlocked, node investments, and when the next node should even be available.
+
+<br>
+
 ## Reference Links
 
 **Resource 1: Title**  
@@ -41,6 +53,12 @@ Research here was conducted on file structure, organization, configuration, and 
 
 **Resource 2: Title**  
 [File Structure in Development](https://gist.github.com/eMediaLab/d2fc4989959234766926c7b618fa1b01)
+
+**Resource 3: Title**
+[Skill Tree tutorial](https://www.freecodecamp.org/news/create-a-borderlands-style-skill-tree-in-5-minutes/)
+
+**Resource 4: Title**
+[Hexagons with CSS and Tailwind](https://medium.com/@dimterion/hexagons-with-css-and-tailwind-5686a089f176)
 
 <br>
 
