@@ -49,7 +49,7 @@ export default function DashboardPage({ navigateTo }) {
           </h2>
         </div>
 
-        {/* Hamburger Menu -> Logout */}
+        {/* Hamburger Menu -> Logout for now */}
         <div
           className="cursor-pointer group mt-2"
           onClick={() => navigateTo("login")}
@@ -95,7 +95,10 @@ export default function DashboardPage({ navigateTo }) {
 
         {/* Center: Future Skill Tree Launch Button */}
         <div className="flex-1 flex items-center justify-center">
-          <button className="relative group text-white transition-colors duration-200">
+          <button
+            onClick={() => navigateTo("skillTree")}
+            className="relative group text-white transition-colors duration-200"
+          >
             <div className="drafting-box absolute inset-0 bg-blue-800/40 group-hover:bg-blue-700/60"></div>
             <div className="relative z-30 px-8 py-4 font-juana text-xl uppercase tracking-widest">
               Open Skill Tree
