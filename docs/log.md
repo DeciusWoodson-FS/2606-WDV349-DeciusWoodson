@@ -54,6 +54,12 @@ Each week I will summarize my milestone activity and progress by writing a stand
 
 ### Week 4
 
-My final stand up...
+⚙️ Overview - What I worked on this past week: This week I finalized the bsic appearance of the skill tree page and used static data to show what the function of the skill tree itself would be like in daily use. It definitely isn't the final product, but, I'm still happy it turned out as well as it did.
+<br>
+🌵 Challenges - What problems did I have & how I'm addressing them: The biggest challenge I faced this week was creating the skill tree itself, as well as the hexagon nodes. I did a lot of research and experimentation to get everything as close to my vision as possible. Refinements still need to be made, but for now, I can move forward.
+<br>
+🏆 Accomplishments - What is something I "leveled up" on this week: Creating the Skill Tree and making it draggable on the screen was definitely a great accomplishment for me. I want Sovereign to feel like a true gamified workout application. Often in most games like Final Fantasy, Kingdom Hearts, and Metaphor (the game that inspired the aesthetics of Sovereign), players are usually able to pan around the skill trees and nodes in order to focus in on a skill and read the descriptions. I wanted to give Sovereign users that same ability, so I focused on implementing that feature while creating the page.
+<br>
+🔮 Next Steps - What I plan to prioritize and do next: Next I plan to refine the pages and styling. I'd like to fill the empty spaces on the dashboard as opposed to having just a button leading to the skill tree. I'd also like to add a customizable profile page for users. I'd also like to start working on the backend and look at deployment on Vercel.
 
 <br>
