@@ -9,6 +9,17 @@ app.use(express.json());
 
 app.get("/health", (req, res) => res.json({ ok: true }));
 
+app.use((req, res) => {
+  res.status(404).json({ error: `No route for ${req.method} ${req.path}` });
+});
+
+// Safety net: an error thrown in an async route/middleware would otherwise
+// become an unhandled rejection and crash the whole process.
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: "Internal server error" });
+});
+
 const port = process.env.PORT || 4000;
 
 connectDB()
