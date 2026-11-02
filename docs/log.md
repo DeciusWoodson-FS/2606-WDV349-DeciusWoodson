@@ -63,3 +63,13 @@ Each week I will summarize my milestone activity and progress by writing a stand
 🔮 Next Steps - What I plan to prioritize and do next: Next I plan to refine the pages and styling. I'd like to fill the empty spaces on the dashboard as opposed to having just a button leading to the skill tree. I'd also like to add a customizable profile page for users. I'd also like to start working on the backend and look at deployment on Vercel.
 
 <br>
+
+### Week 5
+
+⚙️ Overview - What I worked on this past week: This week I kicked off the new month by revisiting Sovereign's scope. I researched the Discovery process, how to evaluate an idea, and the 30-second pitch, then used that to write a business case and a pitch for Sovereign in my R5 notes. From there I wrote a Change Order confirming the Beta scope, and updated my project with Table, Roadmap, and Board views. Once the planning was done, I started the backend: I scaffolded the sovereign-api with Express and a health check, connected it to MongoDB, added error handling, created the Node and Quest models with seed data, and built the skill tree routes that handle node status, prerequisite unlocks, XP, and leveling.
+<br>
+🌵 Challenges - What problems did I have & how I'm addressing them: The biggest challenge was deciding what to cut. Going back through my proposal, I realized features like the equipment filter and the full five-branch skill tree were too much for a Beta, so I moved them to post-Beta and focused on the Push branch and the core loop. I also found my Tech Stack doc no longer matched the code (TanStack Router, Zustand, and TanStack Query were never installed), so I documented those changes in the Change Order. Real authentication also isn't in place yet, so the API uses a clearly flagged placeholder user ID until Better-Auth is integrated in the Security & Compliance milestone.
+<br>
+🏆 Accomplishments - What is something I "leveled up" on this week: Getting the skill tree's core logic working on the backend. Mastering a node now checks its prerequisites, awards XP, handles level-ups, and returns the nodes it unlocks, and the Full Planche only opens up after all three of its prerequisites are mastered. I also kept the work in small, focused commits and separated the API into routes, controllers, and middleware, which made each piece easier to test and review before merging it into dev.
+<br>
+🔮 Next Steps - What I plan to prioritize and do next: Next week I'll build the daily quest routes and connect the Dashboard and Skill Tree to the API so they show real progress instead of static data. I'll also start on the profile page, fill the empty space on the dashboard, and switch to URL-based routing with React Router to prepare for protected pages once authentication is added.
