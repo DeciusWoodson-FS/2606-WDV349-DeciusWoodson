@@ -2,12 +2,16 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { connectDB } from "./db.js";
+import nodesRouter from "./routes/nodes.js";
+import meRouter from "./routes/me.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.get("/health", (req, res) => res.json({ ok: true }));
+app.use("/api/nodes", nodesRouter);
+app.use("/api/me", meRouter);
 
 app.use((req, res) => {
   res.status(404).json({ error: `No route for ${req.method} ${req.path}` });
