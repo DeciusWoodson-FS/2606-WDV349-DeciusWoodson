@@ -24,7 +24,8 @@ database connection succeeds, and exits with an error if it can't connect.
   fields (`name`, `muscleGroup`, `description`, `x`, `y`, `isApex`).
 - **Quest** — one of the 4 daily quests (`key`, `title`, `xpReward`).
 - **User** — created on first request for a given `x-user-id`. Tracks `level`, `xp`,
-  and `masteredNodeKeys`. Level N takes N × 100 XP to clear; leftover XP carries over.
+  `masteredNodeKeys`, `masteries` (each node key with its `masteredAt` date), and
+  `completedQuestKeys` (cleared when the calendar day rolls over). Level N takes N × 100 XP to clear; leftover XP carries over.
 
 Node status (`locked` / `available` / `mastered`) is computed per request from the
 requesting user's `masteredNodeKeys`. It's never stored on the Node itself, since it
@@ -54,6 +55,8 @@ Logic lives in `src/controllers/`; files in `src/routes/` only map URLs to contr
 | GET    | `/health`                | Health check, no user required |
 | GET    | `/api/nodes`             | All nodes with this user's `status` (locked/available/mastered) |
 | POST   | `/api/nodes/:key/master` | Master a node if its prerequisites are met. Awards XP (100, or 300 for the apex node), handles level-ups, and returns which nodes just unlocked. |
-| GET    | `/api/me`                | The user's level, XP, XP needed for the next level, and mastered nodes |
+| GET    | `/api/quests`            | Today's quests with this user's `completed` flag |
+| POST   | `/api/quests/:key/complete` | Complete a quest for today. Awards its XP and handles level-ups. |
+| GET    | `/api/me`                | The user's level, XP, XP needed for the next level, mastered nodes, and `recentMasteries` (the 5 newest, with names and dates) |
 
 All `/api` routes require the `x-user-id` header and return `401` without it.
