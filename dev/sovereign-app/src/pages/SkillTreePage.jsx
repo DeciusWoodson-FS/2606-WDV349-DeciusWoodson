@@ -67,12 +67,12 @@ export default function SkillTreePage({ navigateTo }) {
         <div className="flex items-center gap-6 pointer-events-auto">
           <div className="relative group w-16 h-16 shrink-0">
             <div className="drafting-box absolute inset-0"></div>
-            <div className="absolute inset-0 flex items-center justify-center font-juana text-xs text-neutral-400 z-10">
+            <div className="absolute inset-0 flex items-center justify-center font-heading text-xs text-neutral-400 z-10">
               pfp
             </div>
           </div>
           <div className="flex flex-col gap-1 w-48">
-            <div className="bg-neutral-800 border border-neutral-600 px-2 py-0.5 font-juana text-xs tracking-widest uppercase inline-block w-fit">
+            <div className="bg-neutral-800 border border-neutral-600 px-2 py-0.5 font-heading text-xs tracking-widest uppercase inline-block w-fit">
               Lv. {me ? me.level : "-"}
             </div>
             <div className="relative h-2 w-full bg-neutral-800 border border-neutral-700 overflow-hidden shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]">
@@ -87,9 +87,9 @@ export default function SkillTreePage({ navigateTo }) {
         {/* Center Title */}
         <div className="absolute left-1/2 -translate-x-1/2 top-8 flex flex-col items-center">
           <div className="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center mb-2 border border-neutral-600 pointer-events-auto">
-            <span className="font-juana text-sm">icon</span>
+            <span className="font-heading text-sm">icon</span>
           </div>
-          <h2 className="font-juana text-2xl text-blue-700 tracking-wide drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+          <h2 className="font-heading text-2xl text-blue-700 tracking-wide drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">
             Skill Tree
           </h2>
         </div>
@@ -192,7 +192,7 @@ export default function SkillTreePage({ navigateTo }) {
                           : "bg-neutral-800 text-neutral-400"
                   }`}
                 >
-                  <span className="font-juana text-[10px] uppercase leading-tight tracking-wider select-none pointer-events-none">
+                  <span className="font-heading text-[10px] uppercase leading-tight tracking-wider select-none pointer-events-none">
                     {node.name}
                   </span>
                 </div>
@@ -208,7 +208,7 @@ export default function SkillTreePage({ navigateTo }) {
         <section className="w-full max-w-sm relative group h-[70vh] flex flex-col p-8 self-center pointer-events-auto shadow-2xl">
           <div className="drafting-box absolute inset-0 transition-colors group-hover:bg-neutral-900/90 bg-neutral-950/80"></div>
           <div className="relative z-10 flex flex-1 items-center justify-center text-center">
-            <span className="font-juana text-lg text-neutral-400">
+            <span className="font-heading text-lg text-neutral-400">
               {activeNode
                 ? `Target Muscle: ${activeNode.muscleGroup}`
                 : `Visual of muscle group being targeted`}
@@ -224,12 +224,12 @@ export default function SkillTreePage({ navigateTo }) {
           <div className="drafting-box absolute inset-0 transition-colors group-hover:bg-neutral-900/90 bg-neutral-950/80"></div>
           <div className="relative z-10 flex flex-col gap-4 flex-1 items-center justify-center text-center">
             {loading ? (
-              <span className="font-juana text-lg text-neutral-400">Loading skill tree...</span>
+              <span className="font-heading text-lg text-neutral-400">Loading skill tree...</span>
             ) : !nodeData ? (
-              <span className="font-juana text-lg text-red-400">{error}</span>
+              <span className="font-heading text-lg text-red-400">{error}</span>
             ) : activeNode ? (
               <>
-                <h3 className="font-juana text-2xl text-white uppercase tracking-widest">
+                <h3 className="font-heading text-2xl text-white uppercase tracking-widest">
                   {activeNode.name}
                 </h3>
                 <p className="font-cambria text-neutral-400">
@@ -241,13 +241,13 @@ export default function SkillTreePage({ navigateTo }) {
                   <button
                     onClick={handleMaster}
                     disabled={mastering}
-                    className="mt-6 border border-blue-500 text-blue-400 px-6 py-2 font-juana uppercase hover:bg-blue-900/50 transition-colors disabled:opacity-50"
+                    className="mt-6 border border-blue-500 text-blue-400 px-6 py-2 font-heading uppercase hover:bg-blue-900/50 transition-colors disabled:opacity-50"
                   >
                     {mastering ? "Saving..." : "Mark as Mastered"}
                   </button>
                 )}
                 {activeNode.status === "mastered" && (
-                  <span className="mt-6 font-juana text-green-400 uppercase tracking-widest text-sm">
+                  <span className="mt-6 font-heading text-green-400 uppercase tracking-widest text-sm">
                     Mastered
                   </span>
                 )}
@@ -256,7 +256,7 @@ export default function SkillTreePage({ navigateTo }) {
                 )}
               </>
             ) : (
-              <span className="font-juana text-lg text-neutral-400">
+              <span className="font-heading text-lg text-neutral-400">
                 Select a node to view exercise description
               </span>
             )}

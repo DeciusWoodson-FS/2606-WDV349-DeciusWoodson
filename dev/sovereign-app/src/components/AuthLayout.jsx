@@ -8,7 +8,7 @@ export default function AuthLayout({ children, currentView }) {
       {/* Left Column - Shared Branding */}
       <div className="flex-1 p-12 flex flex-col items-center justify-center relative border-b-2 md:border-b-0 md:border-r-2 border-neutral-700/50">
         <h1 className="mb-8 z-10 hover:scale-105 transition-transform duration-300 metaphor-title-fx flex justify-center">
-          <span className="font-title text-7xl md:text-8xl lg:text-9xl uppercase sovereign-logo-transform">
+          <span className="font-title text-[10vw] md:text-[5vw] uppercase sovereign-logo-transform">
             Sovereign
           </span>
         </h1>
