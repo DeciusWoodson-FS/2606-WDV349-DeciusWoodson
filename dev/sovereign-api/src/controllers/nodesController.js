@@ -54,6 +54,7 @@ export async function masterNode(req, res) {
 
   const masteredBefore = [...user.masteredNodeKeys];
   user.masteredNodeKeys.push(key);
+  user.masteries.push({ nodeKey: key, masteredAt: new Date() });
   user.awardXP(node.isApex ? XP_PER_APEX_NODE : XP_PER_NODE);
   await user.save();
 

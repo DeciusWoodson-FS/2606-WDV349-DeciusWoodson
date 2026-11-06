@@ -9,6 +9,17 @@ const userSchema = new mongoose.Schema(
     level: { type: Number, default: 1 },
     xp: { type: Number, default: 0 },
     masteredNodeKeys: { type: [Number], default: [] },
+    // One entry per mastery, oldest first, so the dashboard can show recent achievements.
+    masteries: {
+      type: [
+        {
+          _id: false,
+          nodeKey: { type: Number, required: true },
+          masteredAt: { type: Date, required: true },
+        },
+      ],
+      default: [],
+    },
     completedQuestKeys: { type: [Number], default: [] },
     questsResetAt: { type: Date, default: Date.now },
   },
