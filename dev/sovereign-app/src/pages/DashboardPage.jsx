@@ -1,6 +1,54 @@
-import React from "react";
+import { useState } from "react";
+import { useApi } from "../hooks/useApi";
+import { completeQuest, fetchMe, fetchQuests } from "../lib/api";
+
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+// Counts calendar days, so something done late last night reads as "Yesterday".
+function daysAgoLabel(date) {
+  const startOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const days = Math.round(
+    (startOfDay(new Date()) - startOfDay(new Date(date))) / MS_PER_DAY
+  );
+  if (days === 0) return "Today";
+  if (days === 1) return "Yesterday";
+  return `${days} days ago`;
+}
 
 export default function DashboardPage({ navigateTo }) {
+  const {
+    data: me,
+    loading: meLoading,
+    error: meError,
+    reload: reloadMe,
+  } = useApi(fetchMe);
+  const {
+    data: quests,
+    loading: questsLoading,
+    error: questsError,
+    reload: reloadQuests,
+  } = useApi(fetchQuests);
+  const [completingId, setCompletingId] = useState(null);
+  const [completeError, setCompleteError] = useState(null);
+
+  // Only one quest saves at a time, since the API rejects simultaneous changes.
+  const handleCompleteQuest = async (quest) => {
+    if (quest.completed || completingId) return;
+    setCompletingId(quest.id);
+    setCompleteError(null);
+    try {
+      await completeQuest(quest.id);
+      await Promise.all([reloadMe(), reloadQuests()]);
+    } catch (err) {
+      setCompleteError(err.message);
+    } finally {
+      setCompletingId(null);
+    }
+  };
+
+  const xpPercent = me ? Math.min(100, Math.round((me.xp / me.xpToNextLevel) * 100)) : 0;
+  const questMessage = completeError || questsError;
+
   return (
     <div className="min-h-screen w-full flex flex-col relative z-10 text-neutral-200">
       <header className="relative w-full p-8 flex justify-between items-start">
@@ -18,10 +66,13 @@ export default function DashboardPage({ navigateTo }) {
             {/* Level & XP Bar */}
             <div className="flex items-center gap-3 w-full">
               <div className="bg-neutral-800 border border-neutral-600 px-3 py-1 font-heading text-sm tracking-widest uppercase">
-                Lv. 14
+                Lv. {me ? me.level : "-"}
               </div>
               <div className="relative h-4 w-48 bg-neutral-800 border border-neutral-700 overflow-hidden shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]">
-                <div className="absolute top-0 left-0 h-full w-[65%] bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.8)]"></div>
+                <div
+                  className="absolute top-0 left-0 h-full bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.8)]"
+                  style={{ width: `${xpPercent}%` }}
+                ></div>
               </div>
             </div>
           </div>
@@ -37,7 +88,7 @@ export default function DashboardPage({ navigateTo }) {
               }}
             />
             <span className="relative z-10 pl-6 font-heading text-2xl text-white drop-shadow-md tracking-wider">
-              leo_vane
+              {me ? me.displayName : "..."}
             </span>
           </div>
         </div>
@@ -71,25 +122,46 @@ export default function DashboardPage({ navigateTo }) {
             Daily Quests
           </h3>
           <div className="relative z-10 flex flex-col gap-6 flex-1 overflow-y-auto">
-            {[
-              "100 Pushups",
-              "5x10 Pullups",
-              "150g Protein",
-              "10 Min L-Sit Grind",
-            ].map((quest, i) => (
-              <label
-                key={i}
-                className="flex items-center gap-4 cursor-pointer group/item"
-              >
-                <div className="w-6 h-6 border-2 border-neutral-500 flex items-center justify-center group-hover/item:border-blue-500 transition-colors"></div>
-                <span className="font-heading text-lg text-neutral-300 group-hover/item:text-white transition-colors">
-                  {quest}
-                </span>
-                <span className="ml-auto text-green-400 font-heading text-sm opacity-0 group-hover/item:opacity-100 transition-opacity">
-                  +50 XP
-                </span>
-              </label>
-            ))}
+            {questsLoading ? (
+              <span className="font-heading text-neutral-400">Loading quests...</span>
+            ) : (
+              quests?.map((quest) => (
+                <button
+                  key={quest.id}
+                  type="button"
+                  onClick={() => handleCompleteQuest(quest)}
+                  disabled={quest.completed || completingId !== null}
+                  className={`flex items-center gap-4 text-left group/item ${
+                    quest.completed ? "opacity-60" : "cursor-pointer"
+                  }`}
+                >
+                  <div
+                    className={`w-6 h-6 shrink-0 border-2 flex items-center justify-center transition-colors ${
+                      quest.completed
+                        ? "border-green-500 bg-green-500/20"
+                        : "border-neutral-500 group-hover/item:border-blue-500"
+                    }`}
+                  >
+                    {quest.completed && (
+                      <span className="text-green-400 text-sm leading-none">✓</span>
+                    )}
+                  </div>
+                  <span className="font-heading text-lg text-neutral-300 group-hover/item:text-white transition-colors">
+                    {quest.title}
+                  </span>
+                  <span
+                    className={`ml-auto text-green-400 font-heading text-sm transition-opacity ${
+                      quest.completed ? "opacity-100" : "opacity-0 group-hover/item:opacity-100"
+                    }`}
+                  >
+                    +{quest.xpReward} XP
+                  </span>
+                </button>
+              ))
+            )}
+            {questMessage && (
+              <span className="font-cambria text-sm text-red-400">{questMessage}</span>
+            )}
           </div>
         </section>
 
@@ -115,28 +187,27 @@ export default function DashboardPage({ navigateTo }) {
             Achievements
           </h3>
           <div className="relative z-10 flex flex-col gap-8 flex-1 overflow-y-auto">
-            <div className="flex flex-col gap-1">
-              <span className="font-heading text-blue-400 text-sm tracking-widest">
-                UNLOCKED
+            {meLoading ? (
+              <span className="font-heading text-neutral-400">Loading achievements...</span>
+            ) : !me ? (
+              <span className="font-cambria text-sm text-red-400">{meError}</span>
+            ) : me.recentMasteries.length === 0 ? (
+              <span className="font-heading text-neutral-400">
+                Master a skill to see it here.
               </span>
-              <span className="font-heading text-xl text-white">
-                Advanced Tuck Planche
-              </span>
-              <span className="font-heading text-neutral-500 text-sm mt-1">
-                2 days ago
-              </span>
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="font-heading text-green-400 text-sm tracking-widest">
-                LEVEL UP
-              </span>
-              <span className="font-heading text-xl text-white">
-                Reached Level 14
-              </span>
-              <span className="font-heading text-neutral-500 text-sm mt-1">
-                1 week ago
-              </span>
-            </div>
+            ) : (
+              me.recentMasteries.map((mastery) => (
+                <div key={mastery.id} className="flex flex-col gap-1">
+                  <span className="font-heading text-blue-400 text-sm tracking-widest">
+                    MASTERED
+                  </span>
+                  <span className="font-heading text-xl text-white">{mastery.name}</span>
+                  <span className="font-heading text-neutral-500 text-sm mt-1">
+                    {daysAgoLabel(mastery.masteredAt)}
+                  </span>
+                </div>
+              ))
+            )}
           </div>
         </section>
       </main>
