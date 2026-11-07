@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useApi } from "../hooks/useApi";
-import { completeQuest, fetchMe, fetchQuests } from "../lib/api";
+import { completeQuest, fetchMe, fetchNodes, fetchQuests } from "../lib/api";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -28,6 +28,7 @@ export default function DashboardPage({ navigateTo }) {
     error: questsError,
     reload: reloadQuests,
   } = useApi(fetchQuests);
+  const { data: nodes, error: nodesError } = useApi(fetchNodes);
   const [completingId, setCompletingId] = useState(null);
   const [completeError, setCompleteError] = useState(null);
 
@@ -48,6 +49,11 @@ export default function DashboardPage({ navigateTo }) {
 
   const xpPercent = me ? Math.min(100, Math.round((me.xp / me.xpToNextLevel) * 100)) : 0;
   const questMessage = completeError || questsError;
+
+  // Nodes come back sorted by key, so the first available one is the earliest unlocked skill.
+  const masteredCount = nodes?.filter((n) => n.status === "mastered").length ?? 0;
+  const nextSkill = nodes?.find((n) => n.status === "available");
+  const treePercent = nodes?.length ? Math.round((masteredCount / nodes.length) * 100) : 0;
 
   return (
     <div className="min-h-screen w-full flex flex-col relative z-10 text-neutral-200">
@@ -165,8 +171,41 @@ export default function DashboardPage({ navigateTo }) {
           </div>
         </section>
 
-        {/* Center: Future Skill Tree Launch Button */}
-        <div className="flex-1 flex items-center justify-center">
+        {/* Center: Skill Tree Progress */}
+        <div className="flex-1 min-w-48 flex flex-col items-center justify-center gap-8 text-center">
+          {nodes ? (
+            <>
+              <div className="flex flex-col items-center gap-3 w-full max-w-48">
+                <span className="font-heading text-5xl text-white">
+                  {masteredCount}
+                  <span className="text-3xl text-neutral-500"> / {nodes.length}</span>
+                </span>
+                <span className="font-heading text-sm text-neutral-400 tracking-widest uppercase">
+                  Skills Mastered
+                </span>
+                <div className="relative h-2 w-full bg-neutral-800 border border-neutral-700 overflow-hidden shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]">
+                  <div
+                    className="absolute top-0 left-0 h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]"
+                    style={{ width: `${treePercent}%` }}
+                  ></div>
+                </div>
+              </div>
+
+              <div className="flex flex-col items-center gap-1">
+                <span className="font-heading text-blue-400 text-sm tracking-widest uppercase">
+                  {nextSkill ? "Next Skill" : "Path Complete"}
+                </span>
+                <span className="font-heading text-xl text-white">
+                  {nextSkill ? nextSkill.name : "Every skill mastered"}
+                </span>
+              </div>
+            </>
+          ) : nodesError ? (
+            <span className="font-cambria text-sm text-red-400">{nodesError}</span>
+          ) : (
+            <span className="font-heading text-neutral-400">Loading progress...</span>
+          )}
+
           <button
             onClick={() => navigateTo("skillTree")}
             className="relative group text-white transition-colors duration-200"
