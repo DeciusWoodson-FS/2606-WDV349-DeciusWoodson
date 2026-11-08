@@ -1,8 +1,9 @@
 //This file handles split-screen design, the Logo, and dynanimc image placeholders(These images will be hand drawn and change depending on the page in question)
 
-import React from "react";
+import { useLocation } from "react-router";
 
-export default function AuthLayout({ children, currentView }) {
+export default function AuthLayout({ children }) {
+  const { pathname } = useLocation();
   return (
     <div className="relative z-10 w-full flex-1 flex flex-col md:flex-row bg-transparent">
       {/* Left Column - Shared Branding */}
@@ -15,7 +16,7 @@ export default function AuthLayout({ children, currentView }) {
 
         {/* Image Placeholder based on active page */}
         <div
-          className={`flex items-center justify-center z-10 relative group mb-8 mt-4 transition-all duration-500 ${currentView === "register" ? "w-64 h-80" : "w-64 h-64"}`}
+          className={`flex items-center justify-center z-10 relative group mb-8 mt-4 transition-all duration-500 ${pathname === "/register" ? "w-64 h-80" : "w-64 h-64"}`}
         >
           <div className="drafting-box absolute inset-0 transition-colors group-hover:bg-neutral-800/80"></div>
           <span className="text-neutral-500 font-cambria text-2xl tracking-widest lowercase relative z-10">

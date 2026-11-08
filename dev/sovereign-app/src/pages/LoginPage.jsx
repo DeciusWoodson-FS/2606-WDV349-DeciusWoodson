@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
-export default function LoginPage({ navigateTo }) {
+export default function LoginPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -13,7 +15,7 @@ export default function LoginPage({ navigateTo }) {
         className="space-y-10 flex flex-col items-center w-full"
         onSubmit={(e) => {
           e.preventDefault();
-          navigateTo("dashboard");
+          navigate("/dashboard");
         }}
       >
         {/* Email Input */}
@@ -51,7 +53,7 @@ export default function LoginPage({ navigateTo }) {
         {/* Standard Login Action */}
         <button
           type="button"
-          onClick={() => navigateTo("dashboard")}
+          onClick={() => navigate("/dashboard")}
           className="w-full relative group text-white transition-colors duration-200"
         >
           <div className="drafting-box absolute inset-0 bg-neutral-600/30 group-hover:bg-neutral-500/50"></div>
@@ -63,7 +65,7 @@ export default function LoginPage({ navigateTo }) {
         {/* Google Login */}
         <button
           type="button"
-          onClick={() => navigateTo("dashboard")}
+          onClick={() => navigate("/dashboard")}
           className="w-full relative group text-neutral-300 hover:text-white transition-colors duration-200"
         >
           <div className="drafting-box absolute inset-0"></div>
@@ -98,7 +100,7 @@ export default function LoginPage({ navigateTo }) {
         {/* Swap to Register Action */}
         <button
           type="button"
-          onClick={() => navigateTo("register")}
+          onClick={() => navigate("/register")}
           className="w-full relative group text-white transition-colors duration-200"
         >
           <div className="drafting-box absolute inset-0 bg-blue-800/60 group-hover:bg-blue-700/80"></div>

@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { useApi } from "../hooks/useApi";
 import { fetchMe, fetchNodes, masterNode } from "../lib/api";
 
-export default function SkillTreePage({ navigateTo }) {
+export default function SkillTreePage() {
+  const navigate = useNavigate();
   const {
     data: nodeData,
     loading,
@@ -97,7 +99,7 @@ export default function SkillTreePage({ navigateTo }) {
         {/* Hamburger Menu -> Back to Dashboard */}
         <div
           className="cursor-pointer group mt-2 pointer-events-auto"
-          onClick={() => navigateTo("dashboard")}
+          onClick={() => navigate("/dashboard")}
         >
           <div className="flex flex-col gap-2">
             <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>

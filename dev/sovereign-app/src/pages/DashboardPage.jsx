@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { useApi } from "../hooks/useApi";
 import { completeQuest, fetchMe, fetchNodes, fetchQuests } from "../lib/api";
 
@@ -15,7 +16,8 @@ function daysAgoLabel(date) {
   return `${days} days ago`;
 }
 
-export default function DashboardPage({ navigateTo }) {
+export default function DashboardPage() {
+  const navigate = useNavigate();
   const {
     data: me,
     loading: meLoading,
@@ -109,7 +111,7 @@ export default function DashboardPage({ navigateTo }) {
         {/* Hamburger Menu -> Logout for now */}
         <div
           className="cursor-pointer group mt-2"
-          onClick={() => navigateTo("login")}
+          onClick={() => navigate("/login")}
         >
           <div className="flex flex-col gap-2">
             <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
@@ -207,7 +209,7 @@ export default function DashboardPage({ navigateTo }) {
           )}
 
           <button
-            onClick={() => navigateTo("skillTree")}
+            onClick={() => navigate("/skill-tree")}
             className="relative group text-white transition-colors duration-200"
           >
             <div className="drafting-box absolute inset-0 bg-blue-800/40 group-hover:bg-blue-700/60"></div>
