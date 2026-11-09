@@ -64,12 +64,18 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-2 items-start">
           {/* Top Row: PFP + Level/XP */}
           <div className="flex items-center gap-6">
-            <div className="relative group w-24 h-24 shrink-0">
-              <div className="drafting-box absolute inset-0"></div>
-              <div className="absolute inset-0 flex items-center justify-center font-heading text-xl text-neutral-400 z-10">
+            <button
+              type="button"
+              aria-label="Open profile"
+              title="Open profile"
+              onClick={() => navigate("/profile")}
+              className="relative group w-24 h-24 shrink-0 cursor-pointer"
+            >
+              <div className="drafting-box absolute inset-0 transition-colors group-hover:bg-blue-800/40"></div>
+              <div className="absolute inset-0 flex items-center justify-center font-heading text-xl text-neutral-400 group-hover:text-white transition-colors z-10">
                 pfp
               </div>
-            </div>
+            </button>
 
             {/* Level & XP Bar */}
             <div className="flex items-center gap-3 w-full">

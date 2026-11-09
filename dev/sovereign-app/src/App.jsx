@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import SkillTreePage from "./pages/SkillTreePage";
+import ProfilePage from "./pages/ProfilePage";
 
 // Background and split-screen layout shared by the login and register pages.
 function AuthShell() {
@@ -41,6 +42,7 @@ export default function App() {
         <Route element={<AppShell />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/skill-tree" element={<SkillTreePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
         {/* No real auth yet, so the root and unknown URLs go to the login page. */}
         <Route path="*" element={<Navigate to="/login" replace />} />
