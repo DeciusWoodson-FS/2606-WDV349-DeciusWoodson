@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
-export default function RegisterPage({ navigateTo }) {
+export default function RegisterPage() {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
@@ -100,7 +102,7 @@ export default function RegisterPage({ navigateTo }) {
         {/* Swap to Login Route */}
         <button
           type="button"
-          onClick={() => navigateTo("login")}
+          onClick={() => navigate("/login")}
           className="text-neutral-500 hover:text-neutral-300 font-cambria tracking-wide transition-colors mt-2"
         >
           Already have an account? Sign in.
