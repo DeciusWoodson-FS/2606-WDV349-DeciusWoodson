@@ -1,13 +1,20 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import { toNodeHandler } from "better-auth/node";
+import { auth, clientOrigin } from "./auth.js";
 import { connectDB } from "./db.js";
 import nodesRouter from "./routes/nodes.js";
 import questsRouter from "./routes/quests.js";
 import meRouter from "./routes/me.js";
 
 const app = express();
-app.use(cors());
+// credentials: true lets the browser send the session cookie to the API.
+app.use(cors({ origin: clientOrigin, credentials: true }));
+
+// Better-Auth handles sign-up, sign-in, sign-out, and sessions under /api/auth.
+// It must come before express.json(), which would otherwise consume the request body.
+app.all("/api/auth/*", toNodeHandler(auth));
 app.use(express.json());
 
 app.get("/health", (req, res) => res.json({ ok: true }));
