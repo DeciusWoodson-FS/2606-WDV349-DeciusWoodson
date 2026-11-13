@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useApi } from "../hooks/useApi";
 import { completeQuest, fetchMe, fetchNodes, fetchQuests } from "../lib/api";
+import { authClient, displayNameOf } from "../lib/authClient";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -31,6 +32,7 @@ export default function DashboardPage() {
     reload: reloadQuests,
   } = useApi(fetchQuests);
   const { data: nodes, error: nodesError } = useApi(fetchNodes);
+  const { data: session } = authClient.useSession();
   const [completingId, setCompletingId] = useState(null);
   const [completeError, setCompleteError] = useState(null);
 
@@ -102,7 +104,7 @@ export default function DashboardPage() {
               }}
             />
             <span className="relative z-10 pl-6 font-heading text-2xl text-white drop-shadow-md tracking-wider">
-              {me ? me.displayName : "..."}
+              {displayNameOf(session) ?? me?.displayName ?? "..."}
             </span>
           </div>
         </div>

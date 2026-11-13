@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
+export const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const USER_ID_KEY = "sovereign-user-id";
 
 // PLACEHOLDER AUTH: the backend has no real login yet, just a per-device id

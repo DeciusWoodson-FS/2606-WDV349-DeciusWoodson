@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import { username } from "better-auth/plugins";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 import { MongoClient } from "mongodb";
 
@@ -23,5 +24,8 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  // Usernames are unique (3-30 letters, numbers, underscores, or dots) and can be
+  // used to sign in instead of an email. `displayUsername` keeps the original casing.
+  plugins: [username()],
   trustedOrigins: [clientOrigin],
 });
