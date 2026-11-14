@@ -51,6 +51,12 @@ export default function DashboardPage() {
     }
   };
 
+  // Ends the session on the server, which also clears the session cookie.
+  const handleLogOut = async () => {
+    await authClient.signOut();
+    navigate("/login", { replace: true });
+  };
+
   const xpPercent = me ? Math.min(100, Math.round((me.xp / me.xpToNextLevel) * 100)) : 0;
   const questMessage = completeError || questsError;
 
@@ -116,17 +122,20 @@ export default function DashboardPage() {
           </h2>
         </div>
 
-        {/* Hamburger Menu -> Logout for now */}
-        <div
+        {/* Hamburger Menu -> Log Out */}
+        <button
+          type="button"
+          aria-label="Log out"
+          title="Log out"
           className="cursor-pointer group mt-2"
-          onClick={() => navigate("/login")}
+          onClick={handleLogOut}
         >
           <div className="flex flex-col gap-2">
             <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
             <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
             <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
           </div>
-        </div>
+        </button>
       </header>
 
       {}
