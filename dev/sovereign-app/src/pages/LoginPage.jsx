@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { authClient } from "../lib/authClient";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  // Where the user was headed before being sent here to sign in.
+  const destination = location.state?.from?.pathname || "/dashboard";
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -26,7 +29,7 @@ export default function LoginPage() {
       setError(signInError.message || "Couldn't sign you in. Please try again.");
       return;
     }
-    navigate("/dashboard");
+    navigate(destination, { replace: true });
   };
 
   return (

@@ -1,5 +1,6 @@
 import { Navigate, Outlet, Route, Routes } from "react-router";
 import AuthLayout from "./components/AuthLayout";
+import { GuestOnly, RequireAuth } from "./components/AuthGuards";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -36,16 +37,20 @@ export default function App() {
     <div className="min-h-screen w-full flex flex-col bg-neutral-900 relative overflow-hidden font-cambria">
       <Routes>
         <Route element={<AuthShell />}>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route element={<GuestOnly />}>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+          </Route>
         </Route>
         <Route element={<AppShell />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/skill-tree" element={<SkillTreePage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/skill-tree" element={<SkillTreePage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+          </Route>
         </Route>
-        {/* No real auth yet, so the root and unknown URLs go to the login page. */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        {/* The root and unknown URLs go to the dashboard, which sends signed-out users to login. */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </div>
   );
