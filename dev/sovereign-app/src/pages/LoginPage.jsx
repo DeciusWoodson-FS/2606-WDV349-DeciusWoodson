@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { authClient } from "../lib/authClient";
+import { authErrorMessage, validateLogin } from "../lib/authValidation";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -15,19 +16,30 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (submitting) return;
+    const value = identifier.trim();
+    const problem = validateLogin({ identifier: value, password });
+    if (problem) {
+      setError(problem);
+      return;
+    }
 
     setSubmitting(true);
     setError(null);
     // Usernames can't contain "@", so anything with one is treated as an email.
-    const value = identifier.trim();
-    const { error: signInError } = value.includes("@")
-      ? await authClient.signIn.email({ email: value, password })
-      : await authClient.signIn.username({ username: value, password });
-    setSubmitting(false);
-
-    if (signInError) {
-      setError(signInError.message || "Couldn't sign you in. Please try again.");
+    try {
+      const { error: signInError } = value.includes("@")
+        ? await authClient.signIn.email({ email: value, password })
+        : await authClient.signIn.username({ username: value, password });
+      if (signInError) {
+        setError(authErrorMessage(signInError));
+        return;
+      }
+    } catch {
+      // The auth client throws, rather than returning an error, when the API can't be reached.
+      setError("Can't reach the server. Please try again.");
       return;
+    } finally {
+      setSubmitting(false);
     }
     navigate(destination, { replace: true });
   };
@@ -40,6 +52,7 @@ export default function LoginPage() {
       <form
         className="space-y-10 flex flex-col items-center w-full"
         onSubmit={handleSubmit}
+        noValidate
       >
         {/* Email Input */}
         <div className="w-full relative group">

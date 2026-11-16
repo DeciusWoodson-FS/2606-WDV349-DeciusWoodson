@@ -52,9 +52,14 @@ export default function DashboardPage() {
   };
 
   // Ends the session on the server, which also clears the session cookie.
+  // If the API can't be reached, the user simply stays signed in on this page.
   const handleLogOut = async () => {
-    await authClient.signOut();
-    navigate("/login", { replace: true });
+    try {
+      const { error } = await authClient.signOut();
+      if (!error) navigate("/login", { replace: true });
+    } catch {
+      // Sign-out didn't reach the server, so the session is still valid.
+    }
   };
 
   const xpPercent = me ? Math.min(100, Math.round((me.xp / me.xpToNextLevel) * 100)) : 0;

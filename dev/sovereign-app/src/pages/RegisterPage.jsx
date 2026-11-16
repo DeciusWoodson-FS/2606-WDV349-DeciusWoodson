@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { authClient } from "../lib/authClient";
+import { authErrorMessage, validateRegistration } from "../lib/authValidation";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -14,25 +15,39 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (submitting) return;
-    if (regPassword !== confirmPassword) {
-      setError("Passwords don't match.");
+    const name = username.trim();
+    const email = regEmail.trim();
+    const problem = validateRegistration({
+      username: name,
+      email,
+      password: regPassword,
+      confirmPassword,
+    });
+    if (problem) {
+      setError(problem);
       return;
     }
 
     setSubmitting(true);
     setError(null);
     // Creates the account and signs the user in. The username doubles as the display name.
-    const { error: signUpError } = await authClient.signUp.email({
-      name: username,
-      username,
-      email: regEmail,
-      password: regPassword,
-    });
-    setSubmitting(false);
-
-    if (signUpError) {
-      setError(signUpError.message || "Couldn't create your account. Please try again.");
+    try {
+      const { error: signUpError } = await authClient.signUp.email({
+        name,
+        username: name,
+        email,
+        password: regPassword,
+      });
+      if (signUpError) {
+        setError(authErrorMessage(signUpError));
+        return;
+      }
+    } catch {
+      // The auth client throws, rather than returning an error, when the API can't be reached.
+      setError("Can't reach the server. Please try again.");
       return;
+    } finally {
+      setSubmitting(false);
     }
     navigate("/dashboard");
   };
@@ -46,6 +61,7 @@ export default function RegisterPage() {
       <form
         className="space-y-6 flex flex-col items-center w-full"
         onSubmit={handleSubmit}
+        noValidate
       >
         <div className="w-full relative group">
           <div className="drafting-box absolute inset-0"></div>
