@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router";
 import { useApi } from "../hooks/useApi";
 import { fetchMe, fetchNodes } from "../lib/api";
+import { authClient, displayNameOf } from "../lib/authClient";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const { data: me, loading: meLoading, error: meError } = useApi(fetchMe);
   const { data: nodes, loading: nodesLoading, error: nodesError } = useApi(fetchNodes);
+  const { data: session } = authClient.useSession();
 
   const xpPercent = me ? Math.min(100, Math.round((me.xp / me.xpToNextLevel) * 100)) : 0;
   const masteredNodes = nodes?.filter((n) => n.status === "mastered") ?? [];
@@ -52,7 +54,7 @@ export default function ProfilePage() {
                 </div>
               </div>
               <span className="font-heading text-3xl text-white tracking-wider">
-                {me.displayName}
+                {displayNameOf(session) ?? me.displayName}
               </span>
               <div className="bg-neutral-800 border border-neutral-600 px-3 py-1 font-heading text-sm tracking-widest uppercase">
                 Lv. {me.level}

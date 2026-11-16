@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useApi } from "../hooks/useApi";
 import { completeQuest, fetchMe, fetchNodes, fetchQuests } from "../lib/api";
+import { authClient, displayNameOf } from "../lib/authClient";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -31,6 +32,7 @@ export default function DashboardPage() {
     reload: reloadQuests,
   } = useApi(fetchQuests);
   const { data: nodes, error: nodesError } = useApi(fetchNodes);
+  const { data: session } = authClient.useSession();
   const [completingId, setCompletingId] = useState(null);
   const [completeError, setCompleteError] = useState(null);
 
@@ -46,6 +48,17 @@ export default function DashboardPage() {
       setCompleteError(err.message);
     } finally {
       setCompletingId(null);
+    }
+  };
+
+  // Ends the session on the server, which also clears the session cookie.
+  // If the API can't be reached, the user simply stays signed in on this page.
+  const handleLogOut = async () => {
+    try {
+      const { error } = await authClient.signOut();
+      if (!error) navigate("/login", { replace: true });
+    } catch {
+      // Sign-out didn't reach the server, so the session is still valid.
     }
   };
 
@@ -102,7 +115,7 @@ export default function DashboardPage() {
               }}
             />
             <span className="relative z-10 pl-6 font-heading text-2xl text-white drop-shadow-md tracking-wider">
-              {me ? me.displayName : "..."}
+              {displayNameOf(session) ?? me?.displayName ?? "..."}
             </span>
           </div>
         </div>
@@ -114,17 +127,20 @@ export default function DashboardPage() {
           </h2>
         </div>
 
-        {/* Hamburger Menu -> Logout for now */}
-        <div
+        {/* Hamburger Menu -> Log Out */}
+        <button
+          type="button"
+          aria-label="Log out"
+          title="Log out"
           className="cursor-pointer group mt-2"
-          onClick={() => navigate("/login")}
+          onClick={handleLogOut}
         >
           <div className="flex flex-col gap-2">
             <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
             <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
             <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
           </div>
-        </div>
+        </button>
       </header>
 
       {}

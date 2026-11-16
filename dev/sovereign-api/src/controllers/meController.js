@@ -3,7 +3,7 @@ import Node from "../models/Node.js";
 const RECENT_MASTERIES_LIMIT = 5;
 
 export async function getMe(req, res) {
-  const { user } = req;
+  const { user, account } = req;
 
   // Masteries are stored oldest first, so the last entries are the newest.
   const recent = user.masteries.slice(-RECENT_MASTERIES_LIMIT).reverse();
@@ -12,7 +12,7 @@ export async function getMe(req, res) {
 
   res.json({
     userId: user.userId,
-    displayName: user.displayName,
+    displayName: account.displayUsername || account.name,
     level: user.level,
     xp: user.xp,
     xpToNextLevel: user.level * 100,

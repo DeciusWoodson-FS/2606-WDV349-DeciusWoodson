@@ -1,25 +1,15 @@
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
-const USER_ID_KEY = "sovereign-user-id";
-
-// PLACEHOLDER AUTH: the backend has no real login yet, just a per-device id
-// sent as `x-user-id`. Replace this with a real session once auth exists.
-function getUserId() {
-  let id = localStorage.getItem(USER_ID_KEY);
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem(USER_ID_KEY, id);
-  }
-  return id;
-}
+export const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 async function apiFetch(path, options = {}) {
   let res;
   try {
+    // credentials: "include" sends the Better-Auth session cookie, which is how
+    // the API knows who is signed in.
     res = await fetch(`${API_BASE}${path}`, {
       ...options,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        "x-user-id": getUserId(),
         ...options.headers,
       },
     });
