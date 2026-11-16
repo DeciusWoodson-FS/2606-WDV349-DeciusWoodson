@@ -28,7 +28,8 @@ trusted for sign-in requests. The server won't start without the first two.
   numeric node id), `prerequisites` (node keys that must be mastered first), and display
   fields (`name`, `muscleGroup`, `description`, `x`, `y`, `isApex`).
 - **Quest** — one of the 4 daily quests (`key`, `title`, `xpReward`).
-- **User** — created on first request for a given `x-user-id`. Tracks `level`, `xp`,
+- **User** — skill tree progress for one account, created on that account's first request
+  and linked to it by `userId` (the Better-Auth account id). Tracks `level`, `xp`,
   `masteredNodeKeys`, `masteries` (each node key with its `masteredAt` date), and
   `completedQuestKeys` (cleared when the calendar day rolls over). Level N takes N × 100 XP to clear; leftover XP carries over.
 
@@ -49,23 +50,28 @@ and the session lives in an `HttpOnly` cookie that lasts 7 days.
 
 | Method | Route                     | Description |
 |--------|---------------------------|-------------|
-| POST   | `/api/auth/sign-up/email` | Create an account (`name`, `email`, `password` of 8+ characters) and sign in |
+| POST   | `/api/auth/sign-up/email` | Create an account (`name`, `username`, `email`, `password` of 8+ characters) and sign in |
 | POST   | `/api/auth/sign-in/email` | Sign in with `email` and `password` |
+| POST   | `/api/auth/sign-in/username` | Sign in with `username` and `password` |
 | POST   | `/api/auth/sign-out`      | End the current session |
 | GET    | `/api/auth/get-session`   | The signed-in user and session, or `null` |
 
 Requests to these routes from a browser must come from `CLIENT_ORIGIN`.
 
-## Auth (placeholder)
+## Signed-in requests
 
-The skill tree routes aren't connected to Better-Auth yet. `src/middleware/requireUser.js` trusts an `x-user-id` request header instead of a real
-session — there is no login/password check yet. Any request can claim any identity by
-setting that header, so **do not treat this as real auth**. It exists so the skill tree
-routes can be built and tested before Better-Auth is integrated in the Security &
-Compliance milestone.
+`src/middleware/requireUser.js` reads the Better-Auth session cookie on every `/api` route
+below and loads (or creates) that account's progress. Requests without a valid session
+get a `401`, so one account can never read or change another account's progress. From a
+browser, requests must be sent with `credentials: "include"` so the cookie goes along.
+
+To try the routes with curl, sign in first and keep the cookie:
 
 ```bash
-curl http://localhost:4000/api/nodes -H "x-user-id: test-user-1"
+curl -c cookies.txt -X POST http://localhost:4000/api/auth/sign-in/email \
+  -H "Origin: http://localhost:5173" -H "Content-Type: application/json" \
+  -d '{"email":"you@example.com","password":"your-password"}'
+curl -b cookies.txt http://localhost:4000/api/nodes
 ```
 
 ## Routes
@@ -79,6 +85,6 @@ Logic lives in `src/controllers/`; files in `src/routes/` only map URLs to contr
 | POST   | `/api/nodes/:key/master` | Master a node if its prerequisites are met. Awards XP (100, or 300 for the apex node), handles level-ups, and returns which nodes just unlocked. |
 | GET    | `/api/quests`            | Today's quests with this user's `completed` flag |
 | POST   | `/api/quests/:key/complete` | Complete a quest for today. Awards its XP and handles level-ups. |
-| GET    | `/api/me`                | The user's level, XP, XP needed for the next level, mastered nodes, and `recentMasteries` (the 5 newest, with names and dates) |
+| GET    | `/api/me`                | The user's display name, level, XP, XP needed for the next level, mastered nodes, and `recentMasteries` (the 5 newest, with names and dates) |
 
-All `/api` routes require the `x-user-id` header and return `401` without it.
+All `/api` routes except `/api/auth` require a signed-in session and return `401` without one.
