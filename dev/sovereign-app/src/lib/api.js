@@ -1,4 +1,8 @@
-export const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
+// In development the API runs separately on port 4000. In production the site forwards
+// /api to the API (see vercel.json), so requests go to the site's own address. That keeps
+// the session cookie first-party, which browsers don't block.
+export const API_BASE =
+  import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 
 async function apiFetch(path, options = {}) {
   let res;

@@ -13,7 +13,10 @@ npm run dev              # http://localhost:4000
 
 `MONGODB_URI` can point at a free MongoDB Atlas cluster, or at a local MongoDB
 (`mongodb://127.0.0.1:27017/sovereign`). The server only starts listening once the
-database connection succeeds, and exits with an error if it can't connect.
+database connection succeeds, and exits with an error if it can't connect. Keep the
+database name (`/sovereign`) at the end of the URI. On Atlas, also set
+`MONGODB_TRANSACTIONS=true` so account changes are saved all-or-nothing; leave it off for a
+local MongoDB, which doesn't support transactions.
 
 `BETTER_AUTH_SECRET` signs session cookies and must be at least 32 random characters
 (`openssl rand -base64 32`). `BETTER_AUTH_URL` is the API's own address, and
