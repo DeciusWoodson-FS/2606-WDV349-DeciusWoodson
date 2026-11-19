@@ -17,10 +17,15 @@ export const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173"
 // it never touches the `users` collection that holds skill tree progress.
 const client = new MongoClient(process.env.MONGODB_URI);
 
+// Transactions keep multi-step writes, like creating an account and its first
+// session, all-or-nothing. Atlas supports them; a local standalone MongoDB doesn't,
+// so they're switched on with MONGODB_TRANSACTIONS=true in production.
+const useTransactions = process.env.MONGODB_TRANSACTIONS === "true";
+
 export const auth = betterAuth({
   // BETTER_AUTH_SECRET and BETTER_AUTH_URL are read from the environment.
-  // Transactions aren't enabled because a local standalone MongoDB doesn't support them.
-  database: mongodbAdapter(client.db()),
+  // The database name comes from the end of MONGODB_URI (for example `/sovereign`).
+  database: mongodbAdapter(client.db(), useTransactions ? { client } : {}),
   emailAndPassword: {
     enabled: true,
   },

@@ -5,6 +5,9 @@
   "type": "module",
   "description": "Backend API for the Sovereign calisthenics skill-tree app.",
   "main": "src/server.js",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
