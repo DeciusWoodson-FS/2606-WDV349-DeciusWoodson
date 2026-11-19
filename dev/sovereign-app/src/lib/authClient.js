@@ -5,7 +5,8 @@ import { API_BASE } from "./api";
 // Talks to the API's Better-Auth routes under /api/auth. The session itself is an
 // HttpOnly cookie, so the frontend never stores or reads a token directly.
 export const authClient = createAuthClient({
-  baseURL: API_BASE,
+  // Better-Auth needs a full address, so use this site's own when API_BASE is empty.
+  baseURL: API_BASE || window.location.origin,
   plugins: [usernameClient()],
 });
 
