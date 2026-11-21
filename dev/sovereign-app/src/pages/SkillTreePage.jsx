@@ -211,9 +211,13 @@ export default function SkillTreePage() {
           <div className="drafting-box absolute inset-0 transition-colors group-hover:bg-neutral-900/90 bg-neutral-950/80"></div>
           <div className="relative z-10 flex flex-1 items-center justify-center text-center">
             <span className="font-heading text-lg text-neutral-400">
-              {activeNode
-                ? `Target Muscle: ${activeNode.muscleGroup}`
-                : `Visual of muscle group being targeted`}
+              {loading
+                ? "Loading..."
+                : !nodeData
+                  ? "Skill tree unavailable"
+                  : activeNode
+                    ? `Target Muscle: ${activeNode.muscleGroup}`
+                    : "Select a skill to see the muscles it trains"}
             </span>
           </div>
         </section>
@@ -258,9 +262,14 @@ export default function SkillTreePage() {
                 )}
               </>
             ) : (
-              <span className="font-heading text-lg text-neutral-400">
-                Select a node to view exercise description
-              </span>
+              <>
+                <span className="font-heading text-lg text-neutral-400">
+                  Select a skill to see how to perform it
+                </span>
+                {error && (
+                  <span className="font-cambria text-sm text-red-400">{error}</span>
+                )}
+              </>
             )}
           </div>
         </section>
