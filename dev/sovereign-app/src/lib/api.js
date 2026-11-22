@@ -4,6 +4,10 @@
 export const API_BASE =
   import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 
+// Fired when the API answers 401, meaning the session has expired or was ended
+// elsewhere. The route guard listens for it and sends the user back to log in.
+export const SESSION_EXPIRED_EVENT = "sovereign:session-expired";
+
 async function apiFetch(path, options = {}) {
   let res;
   try {
@@ -22,6 +26,7 @@ async function apiFetch(path, options = {}) {
     throw new Error("Can't reach the server. Please try again.");
   }
 
+  if (res.status === 401) window.dispatchEvent(new Event(SESSION_EXPIRED_EVENT));
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     throw new Error(body.error || `Request failed with status ${res.status}`);

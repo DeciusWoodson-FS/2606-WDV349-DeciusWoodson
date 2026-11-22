@@ -35,6 +35,7 @@ export default function DashboardPage() {
   const { data: session } = authClient.useSession();
   const [completingId, setCompletingId] = useState(null);
   const [completeError, setCompleteError] = useState(null);
+  const [logOutError, setLogOutError] = useState(null);
 
   // Only one quest saves at a time, since the API rejects simultaneous changes.
   const handleCompleteQuest = async (quest) => {
@@ -54,12 +55,17 @@ export default function DashboardPage() {
   // Ends the session on the server, which also clears the session cookie.
   // If the API can't be reached, the user simply stays signed in on this page.
   const handleLogOut = async () => {
+    setLogOutError(null);
     try {
       const { error } = await authClient.signOut();
-      if (!error) navigate("/login", { replace: true });
+      if (!error) {
+        navigate("/login", { replace: true });
+        return;
+      }
     } catch {
       // Sign-out didn't reach the server, so the session is still valid.
     }
+    setLogOutError("Couldn't log out. Please try again.");
   };
 
   const xpPercent = me ? Math.min(100, Math.round((me.xp / me.xpToNextLevel) * 100)) : 0;
@@ -128,19 +134,26 @@ export default function DashboardPage() {
         </div>
 
         {/* Hamburger Menu -> Log Out */}
-        <button
-          type="button"
-          aria-label="Log out"
-          title="Log out"
-          className="cursor-pointer group mt-2"
-          onClick={handleLogOut}
-        >
-          <div className="flex flex-col gap-2">
-            <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
-            <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
-            <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
-          </div>
-        </button>
+        <div className="flex flex-col items-end gap-2 mt-2">
+          <button
+            type="button"
+            aria-label="Log out"
+            title="Log out"
+            className="cursor-pointer group"
+            onClick={handleLogOut}
+          >
+            <div className="flex flex-col gap-2">
+              <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
+              <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
+              <div className="w-10 h-1 bg-white group-hover:bg-blue-500 transition-colors"></div>
+            </div>
+          </button>
+          {logOutError && (
+            <span role="alert" className="font-cambria text-sm text-red-400">
+              {logOutError}
+            </span>
+          )}
+        </div>
       </header>
 
       {}
